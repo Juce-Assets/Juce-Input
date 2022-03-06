@@ -1,0 +1,82 @@
+{
+    "name": "ExampleInputActions",
+    "maps": [
+        {
+            "name": "ActionA",
+            "id": "485fd017-307d-4a10-8a68-8f7acc4b25a2",
+            "actions": [
+                {
+                    "name": "A",
+                    "type": "Button",
+                    "id": "f50accb2-7341-4ff0-bb71-7a2714c403c9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "2013a855-d674-4eda-8f32-cabcee2b4823",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "A",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a7f9d410-31f0-4c7d-9d36-6954d102e858",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "A",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "ActionDPad",
+            "id": "e86b7f24-a239-4bef-8c15-b51dd2471007",
+            "actions": [
+                {
+                    "name": "DPadLeft",
+                    "type": "Button",
+                    "id": "e5ef9a52-29b2-4c17-8b28-03ca8e027ac8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "0d1b1e5d-ae81-471f-81d1-10ea1b50162f",
+                    "path": "<Gamepad>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "DPadLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Gamepad",
+            "bindingGroup": "Gamepad",
+            "devices": []
+        },
+        {
+            "name": "Keyboard",
+            "bindingGroup": "Keyboard",
+            "devices": []
+        }
+    ]
+}

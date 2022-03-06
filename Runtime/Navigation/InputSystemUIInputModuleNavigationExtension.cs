@@ -6,7 +6,7 @@ using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 using static UnityEngine.InputSystem.InputAction;
 
-namespace Juce.CoreUnity.Ui.Others.Navigation
+namespace Juce.Input.Navigation
 {
     public class InputSystemUIInputModuleNavigationExtension : MonoBehaviour
     {
