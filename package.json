@@ -1,0 +1,17 @@
+{
+  "name": "com.juce.input",
+  "version": "0.0.1",
+  "displayName": "Juce-Input",
+  "description": "Juce Input",
+  "keywords": [
+    "Juce",
+    "Input"
+  ],
+  "author": {
+    "name": "Guillem Sunyer",
+    "email": "juce.unity@gmail.com",
+    "url": "https://github.com/Juce-Assets/Juce-Input"
+  },
+  "type": "template",
+  "hideInEditor": false
+}
