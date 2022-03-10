@@ -47,6 +47,19 @@ namespace Juce.Input.Navigation
             TrySelectDesignated();
         }
 
+        private void OnApplicationFocus(bool focus)
+        {
+            if(!focus)
+            {
+                return;
+            }
+
+            if(!IsUsingSelectables)
+            {
+                return;
+            }
+        }
+
         public void SetFallbackSelectable(Selectable fallbackSelectable)
         {
             if (fallbackSelectable == null)

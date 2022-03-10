@@ -34,6 +34,11 @@ namespace Juce.Input.Examples
 
         private void Update()
         {
+            if(Gamepad.current == null)
+            {
+                return;
+            }
+
             InputControl gamepadButtonPressed = Gamepad.current.allControls.Where(x => x is ButtonControl button && x.IsPressed() && !x.synthetic).FirstOrDefault();
 
             if (gamepadButtonPressed != null)
