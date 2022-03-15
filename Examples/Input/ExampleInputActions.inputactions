@@ -40,11 +40,11 @@
             ]
         },
         {
-            "name": "ActionDPad",
+            "name": "Movement",
             "id": "e86b7f24-a239-4bef-8c15-b51dd2471007",
             "actions": [
                 {
-                    "name": "DPadLeft",
+                    "name": "MovementUp",
                     "type": "Button",
                     "id": "e5ef9a52-29b2-4c17-8b28-03ca8e027ac8",
                     "expectedControlType": "Button",
@@ -56,11 +56,22 @@
                 {
                     "name": "",
                     "id": "0d1b1e5d-ae81-471f-81d1-10ea1b50162f",
-                    "path": "<Gamepad>/dpad/left",
+                    "path": "<Gamepad>/dpad/up",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "DPadLeft",
+                    "action": "MovementUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a85fc787-0372-499a-82af-f13638e62ff2",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "MovementUp",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

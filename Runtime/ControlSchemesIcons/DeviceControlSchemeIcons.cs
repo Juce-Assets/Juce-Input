@@ -6,10 +6,10 @@ namespace Juce.CoreUnity.ControlSchemeIcons
     [CreateAssetMenu(fileName = "DeviceControlSchemeIcons", menuName = "Juce/Input/DeviceControlSchemeIcons", order = 1)]
     public class DeviceControlSchemeIcons : ScriptableObject
     {
-        [SerializeField] private string devicePathId = default;
+        [SerializeField] private List<string> devicePathIds = default;
         [SerializeField] private List<ControlSchemeIconItem> items = new List<ControlSchemeIconItem>();
 
-        public string DevicePathId => devicePathId;
+        public IReadOnlyList<string> DevicePathIds => devicePathIds;
 
         public bool TryGet(string inputPath, out IControlSchemeIconItem controlSchemeIconItem)
         {

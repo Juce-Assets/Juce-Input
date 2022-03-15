@@ -11,9 +11,23 @@ namespace Juce.Input.InputPath
 
         public static bool MatchesDeviceId(InputBinding binding, string deviceId)
         {
-            InputControl control = InputSystem.FindControl(binding.path);
+            InputControlList<InputControl> controls = InputSystem.FindControls(binding.path);
 
-            return MatchesDeviceId(control, deviceId);
+            foreach(InputControl control in controls)
+            {
+                bool matchesDevice = MatchesDeviceId(control, deviceId);
+
+                if(!matchesDevice)
+                {
+                    continue;
+                }
+
+                controls.Dispose();
+                return true;
+            }
+
+            controls.Dispose();
+            return false;
         }
 
         public static string GetChildPath(InputControl inputControl)

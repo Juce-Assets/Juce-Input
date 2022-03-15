@@ -10,13 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f3dc1bfbf9ca7e94f981ce1dd38fa031, type: 3}
-  m_Name: DeviceControlSchemeIcons
+  m_Name: KebyoardIcons
   m_EditorClassIdentifier: 
-  devicePathId: XInputControllerWindows
+  devicePathIds:
+  - Keyboard
   items:
-  - inputPath: buttonSouth
-    atlasAsset: XboxTexture0
+  - inputPath: <Keyboard>/a
+    atlasAsset: Keyboard0
     atlasName: A
-  - inputPath: dpad/left
-    atlasAsset: XboxTexture1
-    atlasName: DPadLeft
+  - inputPath: <Keyboard>/w
+    atlasAsset: Keyboard0
+    atlasName: W

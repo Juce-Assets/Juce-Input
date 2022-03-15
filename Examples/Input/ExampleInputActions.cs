@@ -53,11 +53,11 @@ public class @ExampleInputActions : IInputActionCollection, IDisposable
             ]
         },
         {
-            ""name"": ""ActionDPad"",
+            ""name"": ""Movement"",
             ""id"": ""e86b7f24-a239-4bef-8c15-b51dd2471007"",
             ""actions"": [
                 {
-                    ""name"": ""DPadLeft"",
+                    ""name"": ""MovementUp"",
                     ""type"": ""Button"",
                     ""id"": ""e5ef9a52-29b2-4c17-8b28-03ca8e027ac8"",
                     ""expectedControlType"": ""Button"",
@@ -69,11 +69,22 @@ public class @ExampleInputActions : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""0d1b1e5d-ae81-471f-81d1-10ea1b50162f"",
-                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""path"": ""<Gamepad>/dpad/up"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""DPadLeft"",
+                    ""action"": ""MovementUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a85fc787-0372-499a-82af-f13638e62ff2"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""MovementUp"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -96,9 +107,9 @@ public class @ExampleInputActions : IInputActionCollection, IDisposable
         // ActionA
         m_ActionA = asset.FindActionMap("ActionA", throwIfNotFound: true);
         m_ActionA_A = m_ActionA.FindAction("A", throwIfNotFound: true);
-        // ActionDPad
-        m_ActionDPad = asset.FindActionMap("ActionDPad", throwIfNotFound: true);
-        m_ActionDPad_DPadLeft = m_ActionDPad.FindAction("DPadLeft", throwIfNotFound: true);
+        // Movement
+        m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
+        m_Movement_MovementUp = m_Movement.FindAction("MovementUp", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -178,38 +189,38 @@ public class @ExampleInputActions : IInputActionCollection, IDisposable
     }
     public ActionAActions @ActionA => new ActionAActions(this);
 
-    // ActionDPad
-    private readonly InputActionMap m_ActionDPad;
-    private IActionDPadActions m_ActionDPadActionsCallbackInterface;
-    private readonly InputAction m_ActionDPad_DPadLeft;
-    public struct ActionDPadActions
+    // Movement
+    private readonly InputActionMap m_Movement;
+    private IMovementActions m_MovementActionsCallbackInterface;
+    private readonly InputAction m_Movement_MovementUp;
+    public struct MovementActions
     {
         private @ExampleInputActions m_Wrapper;
-        public ActionDPadActions(@ExampleInputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @DPadLeft => m_Wrapper.m_ActionDPad_DPadLeft;
-        public InputActionMap Get() { return m_Wrapper.m_ActionDPad; }
+        public MovementActions(@ExampleInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @MovementUp => m_Wrapper.m_Movement_MovementUp;
+        public InputActionMap Get() { return m_Wrapper.m_Movement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(ActionDPadActions set) { return set.Get(); }
-        public void SetCallbacks(IActionDPadActions instance)
+        public static implicit operator InputActionMap(MovementActions set) { return set.Get(); }
+        public void SetCallbacks(IMovementActions instance)
         {
-            if (m_Wrapper.m_ActionDPadActionsCallbackInterface != null)
+            if (m_Wrapper.m_MovementActionsCallbackInterface != null)
             {
-                @DPadLeft.started -= m_Wrapper.m_ActionDPadActionsCallbackInterface.OnDPadLeft;
-                @DPadLeft.performed -= m_Wrapper.m_ActionDPadActionsCallbackInterface.OnDPadLeft;
-                @DPadLeft.canceled -= m_Wrapper.m_ActionDPadActionsCallbackInterface.OnDPadLeft;
+                @MovementUp.started -= m_Wrapper.m_MovementActionsCallbackInterface.OnMovementUp;
+                @MovementUp.performed -= m_Wrapper.m_MovementActionsCallbackInterface.OnMovementUp;
+                @MovementUp.canceled -= m_Wrapper.m_MovementActionsCallbackInterface.OnMovementUp;
             }
-            m_Wrapper.m_ActionDPadActionsCallbackInterface = instance;
+            m_Wrapper.m_MovementActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @DPadLeft.started += instance.OnDPadLeft;
-                @DPadLeft.performed += instance.OnDPadLeft;
-                @DPadLeft.canceled += instance.OnDPadLeft;
+                @MovementUp.started += instance.OnMovementUp;
+                @MovementUp.performed += instance.OnMovementUp;
+                @MovementUp.canceled += instance.OnMovementUp;
             }
         }
     }
-    public ActionDPadActions @ActionDPad => new ActionDPadActions(this);
+    public MovementActions @Movement => new MovementActions(this);
     private int m_GamepadSchemeIndex = -1;
     public InputControlScheme GamepadScheme
     {
@@ -232,8 +243,8 @@ public class @ExampleInputActions : IInputActionCollection, IDisposable
     {
         void OnA(InputAction.CallbackContext context);
     }
-    public interface IActionDPadActions
+    public interface IMovementActions
     {
-        void OnDPadLeft(InputAction.CallbackContext context);
+        void OnMovementUp(InputAction.CallbackContext context);
     }
 }
