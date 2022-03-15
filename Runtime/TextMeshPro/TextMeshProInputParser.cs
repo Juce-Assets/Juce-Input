@@ -80,6 +80,8 @@ namespace Juce.Input.TextMeshPro
         {
             List<XmlNode> nodes = InputTagsParser.Parse(originalText);
 
+            string currentText = originalText;
+
             foreach (XmlNode node in nodes)
             {
                 bool iconFound = TryGetControlSchemeIconItem(
@@ -104,7 +106,7 @@ namespace Juce.Input.TextMeshPro
                     else
                     {
                         text.text = InputTagsParser.ReplaceTag(
-                            originalText,
+                            currentText,
                             node.InnerText,
                             $"Not found {node.InnerText}"
                             );
@@ -119,7 +121,7 @@ namespace Juce.Input.TextMeshPro
                     );
 
                 text.text = InputTagsParser.ReplaceTag(
-                    originalText,
+                    currentText,
                     node.InnerText,
                     iconPath
                     );

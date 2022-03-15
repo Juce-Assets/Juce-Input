@@ -71,6 +71,11 @@ namespace Juce.Input.Devices
                 return;
             }
 
+            if(inputDevice == Mouse.current)
+            {
+                return;
+            }
+
             LogVerbose($"New device detected {inputDevice.path}");
 
             LastUsedInputDeviceId = newInputDeviceId;
