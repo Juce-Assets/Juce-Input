@@ -1,6 +1,4 @@
-﻿#if JUCE_TEXT_MESH_PRO_EXTENSIONS
-
-using Juce.CoreUnity.ControlSchemeIcons;
+﻿using Juce.CoreUnity.ControlSchemeIcons;
 using Juce.Input.Devices;
 using Juce.Input.InputPath;
 using Juce.Input.Tags;
@@ -235,5 +233,3 @@ namespace Juce.Input.TextMeshPro
         }
     }
 }
-
-#endif 
