@@ -120,12 +120,14 @@ namespace Juce.Input.TextMeshPro
                     controlSchemeIconItem.AtlasName
                     );
 
-                text.text = InputTagsParser.ReplaceTag(
+                currentText = InputTagsParser.ReplaceTag(
                     currentText,
                     node.InnerText,
                     iconPath
                     );
             }
+
+            text.text = currentText;
         }
 
         private bool TryGetControlSchemeIconItem(
