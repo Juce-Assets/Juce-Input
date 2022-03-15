@@ -8,6 +8,8 @@ namespace Juce.Input.Devices
 {
     public class InputSystemCurrentDevicesExtension : MonoBehaviour
     {
+        [SerializeField] private bool verbose = default;
+
         private readonly AnyKeyInputAction anyKeyInputAction = new AnyKeyInputAction();
 
         public int LastUsedInputDeviceId { get; private set; }
@@ -56,7 +58,7 @@ namespace Juce.Input.Devices
                 return;
             }
 
-            UnityEngine.Debug.Log("No input device found at startup", gameObject);
+            LogVerbose("No input device found at startup");
             LastUsedInputDeviceId = InputDevice.InvalidDeviceId;
         }
 
@@ -68,6 +70,8 @@ namespace Juce.Input.Devices
             {
                 return;
             }
+
+            LogVerbose($"New device detected {inputDevice.path}");
 
             LastUsedInputDeviceId = newInputDeviceId;
             OnLastUsedInputDeviceChanged?.Invoke(LastUsedInputDeviceId);
@@ -93,6 +97,8 @@ namespace Juce.Input.Devices
 
         private void OnAnyKeyPressed(CallbackContext callbackContext)
         {
+            LogVerbose($"Key pressed {callbackContext.action.activeControl.path}");
+
             TrySetNewInputDevice(callbackContext.action.activeControl.device);
         }
 
@@ -106,6 +112,22 @@ namespace Juce.Input.Devices
 
             inputDevice = InputSystem.GetDeviceById(LastUsedInputDeviceId);
             return inputDevice != null;
+        }
+
+        public bool TryGetKeyboardInputDevice(out InputDevice inputDevice)
+        {
+            inputDevice = Keyboard.current;
+            return inputDevice != null;
+        }
+
+        private void LogVerbose(string log)
+        {
+            if (!verbose)
+            {
+                return;
+            }
+
+            UnityEngine.Debug.Log(log, gameObject);
         }
     }
 }

@@ -18,6 +18,27 @@ MonoBehaviour:
   - inputPath: <Keyboard>/a
     atlasAsset: Keyboard0
     atlasName: A
-  - inputPath: <Keyboard>/w
+  - inputPath: <Keyboard>/b
     atlasAsset: Keyboard0
-    atlasName: W
+    atlasName: B
+  - inputPath: <Keyboard>/y
+    atlasAsset: Keyboard0
+    atlasName: Y
+  - inputPath: <Keyboard>/x
+    atlasAsset: Keyboard0
+    atlasName: X
+  - inputPath: <Keyboard>/r
+    atlasAsset: Keyboard0
+    atlasName: R
+  - inputPath: <Keyboard>/upArrow
+    atlasAsset: Keyboard0
+    atlasName: ArrowUp
+  - inputPath: <Keyboard>/downArrow
+    atlasAsset: Keyboard0
+    atlasName: ArrowDown
+  - inputPath: <Keyboard>/leftArrow
+    atlasAsset: Keyboard0
+    atlasName: ArrowLeft
+  - inputPath: <Keyboard>/rightArrow
+    atlasAsset: Keyboard0
+    atlasName: ArrowRight

@@ -68,68 +68,51 @@ namespace Juce.Input.TextMeshPro
 
             LogVerbose($"Updating text for input device: {inputDevice.name}");
 
-            UpdateTextForInputDevice(inputDevice);
+            InputSystemCurrentDevicesExtension.Current.TryGetKeyboardInputDevice(
+                out InputDevice keyboardInputDevice
+                );
+
+            UpdateTextForInputDevice(inputDevice, defaultInputDevice: keyboardInputDevice);
         }
 
-        private void UpdateTextForInputDevice(InputDevice inputDevice)
+        private void UpdateTextForInputDevice(
+            InputDevice inputDevice,
+            InputDevice defaultInputDevice
+            )
         {
             List<XmlNode> nodes = InputTagsParser.Parse(originalText);
 
             foreach (XmlNode node in nodes)
             {
-                bool found = TryGetInputBindingByName(
-                    node.InnerText,
-                    inputDevice.name,
-                    out InputBinding foundInputBinding
-                    );
-
-                if (!found)
-                {
-                    LogVerbose($"Binding with name {node.InnerText} could not be found");
-
-                    text.text = InputTagsParser.ReplaceTag(
-                        originalText,
-                        node.InnerText,
-                        node.InnerText
-                        );
-
-                    continue;
-                }
-
-                bool iconSetFound = TryGetDeviceControlSchemeIcons(
+                bool iconFound = TryGetControlSchemeIconItem(
                     inputDevice,
-                    out DeviceControlSchemeIcons deviceControlSchemeIcons
-                    );
-
-                if(!iconSetFound)
-                {
-                    LogVerbose($"DeviceControlScheme with name {inputDevice.name} could not be found");
-
-                    text.text = InputTagsParser.ReplaceTag(
-                        originalText,
-                        node.InnerText,
-                        foundInputBinding.effectivePath
-                        );
-
-                    continue;
-                }
-
-                bool foundIcons = deviceControlSchemeIcons.TryGet(
-                    foundInputBinding.effectivePath,
+                    node.InnerText,
                     out IControlSchemeIconItem controlSchemeIconItem
                     );
 
-                if (!foundIcons)
+                if(!iconFound)
                 {
-                    LogVerbose($"Icon with path {foundInputBinding.effectivePath} could not be found");
-
-                    text.text = InputTagsParser.ReplaceTag(
-                        originalText,
+                    iconFound = TryGetControlSchemeIconItem(
+                        defaultInputDevice,
                         node.InnerText,
-                        foundInputBinding.effectivePath
+                        out controlSchemeIconItem
                         );
 
-                    continue;
+                    if (iconFound)
+                    {
+                        UnityEngine.Debug.Log($"Icon not found for device {inputDevice.path}. " +
+                            $"Using default {defaultInputDevice.path}", gameObject);
+                    }
+                    else
+                    {
+                        text.text = InputTagsParser.ReplaceTag(
+                            originalText,
+                            node.InnerText,
+                            $"Not found {node.InnerText}"
+                            );
+
+                        continue;
+                    }
                 }
 
                 string iconPath = TextMeshProUtils.BuildMarkdownForSprite(
@@ -143,6 +126,41 @@ namespace Juce.Input.TextMeshPro
                     iconPath
                     );
             }
+        }
+
+        private bool TryGetControlSchemeIconItem(
+            InputDevice inputDevice, 
+            string actionName,
+            out IControlSchemeIconItem controlSchemeIconItem
+            )
+        {
+            bool found = TryGetInputBindingByName(
+                actionName,
+                inputDevice.name,
+                out InputBinding foundInputBinding
+                );
+
+            if(!found)
+            {
+                controlSchemeIconItem = default;
+                return false;
+            }
+
+            bool iconSetFound = TryGetDeviceControlSchemeIcons(
+                inputDevice,
+                out DeviceControlSchemeIcons deviceControlSchemeIcons
+                );
+
+            if(!iconSetFound)
+            {
+                controlSchemeIconItem = default;
+                return false;
+            }
+
+            return deviceControlSchemeIcons.TryGet(
+                foundInputBinding.effectivePath,
+                out controlSchemeIconItem
+                );
         }
 
         private bool TryGetInputBindingByName(
