@@ -15,9 +15,18 @@ MonoBehaviour:
   devicePathIds:
   - Keyboard
   items:
+  - inputPath: <Keyboard>/w
+    atlasAsset: Keyboard0
+    atlasName: W
   - inputPath: <Keyboard>/a
     atlasAsset: Keyboard0
     atlasName: A
+  - inputPath: <Keyboard>/s
+    atlasAsset: Keyboard0
+    atlasName: S
+  - inputPath: <Keyboard>/d
+    atlasAsset: Keyboard0
+    atlasName: D
   - inputPath: <Keyboard>/b
     atlasAsset: Keyboard0
     atlasName: B

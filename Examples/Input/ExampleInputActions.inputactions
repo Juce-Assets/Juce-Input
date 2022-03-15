@@ -76,6 +76,30 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "W",
+                    "type": "Button",
+                    "id": "dd633814-8b0b-4a20-9319-428c5fc1fdc8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "S",
+                    "type": "Button",
+                    "id": "fde37d73-1814-492f-8678-4bc712f21c30",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "D",
+                    "type": "Button",
+                    "id": "f43d0bfb-bb59-451f-afb5-6fbb4cd367db",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -263,6 +287,39 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Start",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ffd68894-f386-47c9-9a97-41c94e6756ee",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "W",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6a053241-1b6f-4edb-a98b-325a410e89f1",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "S",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "73a181ec-b3a3-49ba-9fef-a4cb1f49a5a8",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "D",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
