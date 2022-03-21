@@ -10,20 +10,6 @@ namespace Juce.CoreUnity.ControlSchemeIcons
         [SerializeField] private List<ControlSchemeIconItem> items = new List<ControlSchemeIconItem>();
 
         public IReadOnlyList<string> DevicePathIds => devicePathIds;
-
-        public bool TryGet(string inputPath, out IControlSchemeIconItem controlSchemeIconItem)
-        {
-            foreach (ControlSchemeIconItem item in items)
-            {
-                if (string.Equals(item.InputPath, inputPath))
-                {
-                    controlSchemeIconItem = item;
-                    return true;
-                }
-            }
-
-            controlSchemeIconItem = default;
-            return false;
-        }
+        public IReadOnlyList<ControlSchemeIconItem> Items => items;
     }
 }

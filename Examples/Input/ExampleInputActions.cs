@@ -113,6 +113,14 @@ public class @ExampleInputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""R"",
+                    ""type"": ""Button"",
+                    ""id"": ""ac16aa8b-9769-410e-b65d-243ae349e1dc"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -335,6 +343,17 @@ public class @ExampleInputActions : IInputActionCollection, IDisposable
                     ""action"": ""D"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1f870ba0-8167-4b4a-97ee-e54c99861e9a"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""R"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -366,6 +385,7 @@ public class @ExampleInputActions : IInputActionCollection, IDisposable
         m_Actions_W = m_Actions.FindAction("W", throwIfNotFound: true);
         m_Actions_S = m_Actions.FindAction("S", throwIfNotFound: true);
         m_Actions_D = m_Actions.FindAction("D", throwIfNotFound: true);
+        m_Actions_R = m_Actions.FindAction("R", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -427,6 +447,7 @@ public class @ExampleInputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_Actions_W;
     private readonly InputAction m_Actions_S;
     private readonly InputAction m_Actions_D;
+    private readonly InputAction m_Actions_R;
     public struct ActionsActions
     {
         private @ExampleInputActions m_Wrapper;
@@ -443,6 +464,7 @@ public class @ExampleInputActions : IInputActionCollection, IDisposable
         public InputAction @W => m_Wrapper.m_Actions_W;
         public InputAction @S => m_Wrapper.m_Actions_S;
         public InputAction @D => m_Wrapper.m_Actions_D;
+        public InputAction @R => m_Wrapper.m_Actions_R;
         public InputActionMap Get() { return m_Wrapper.m_Actions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -488,6 +510,9 @@ public class @ExampleInputActions : IInputActionCollection, IDisposable
                 @D.started -= m_Wrapper.m_ActionsActionsCallbackInterface.OnD;
                 @D.performed -= m_Wrapper.m_ActionsActionsCallbackInterface.OnD;
                 @D.canceled -= m_Wrapper.m_ActionsActionsCallbackInterface.OnD;
+                @R.started -= m_Wrapper.m_ActionsActionsCallbackInterface.OnR;
+                @R.performed -= m_Wrapper.m_ActionsActionsCallbackInterface.OnR;
+                @R.canceled -= m_Wrapper.m_ActionsActionsCallbackInterface.OnR;
             }
             m_Wrapper.m_ActionsActionsCallbackInterface = instance;
             if (instance != null)
@@ -528,6 +553,9 @@ public class @ExampleInputActions : IInputActionCollection, IDisposable
                 @D.started += instance.OnD;
                 @D.performed += instance.OnD;
                 @D.canceled += instance.OnD;
+                @R.started += instance.OnR;
+                @R.performed += instance.OnR;
+                @R.canceled += instance.OnR;
             }
         }
     }
@@ -564,5 +592,6 @@ public class @ExampleInputActions : IInputActionCollection, IDisposable
         void OnW(InputAction.CallbackContext context);
         void OnS(InputAction.CallbackContext context);
         void OnD(InputAction.CallbackContext context);
+        void OnR(InputAction.CallbackContext context);
     }
 }

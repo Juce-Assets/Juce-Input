@@ -119,7 +119,7 @@ namespace Juce.Input.Devices
             return inputDevice != null;
         }
 
-        public bool TryGetKeyboardInputDevice(out InputDevice inputDevice)
+        public static bool TryGetKeyboardInputDevice(out InputDevice inputDevice)
         {
             inputDevice = Keyboard.current;
             return inputDevice != null;

@@ -1,6 +1,7 @@
 ﻿using Juce.CoreUnity.ControlSchemeIcons;
 using Juce.Input.Devices;
-using Juce.Input.InputPath;
+using Juce.Input.InputActionAssets;
+using Juce.Input.InputParsing;
 using Juce.Input.Tags;
 using System.Collections.Generic;
 using System.Xml;
@@ -9,37 +10,51 @@ using UnityEngine.InputSystem;
 
 namespace Juce.Input.TextMeshPro
 {
+    [ExecuteInEditMode]
     public class TextMeshProInputParser : MonoBehaviour
     {
+        [Header("References")]
         [SerializeField] private TMPro.TextMeshProUGUI text = default;
         [SerializeField] private InputActionAsset inputActionAsset = default;
         [SerializeField] private List<DeviceControlSchemeIcons> deviceControlSchemeIconsList = default;
 
+        [SerializeField, TextArea] private string originalText = default;
+
         [Header("Debug")]
-        [SerializeField] private bool verbose = default;
+        [SerializeField, Min(0)] private int selectedEditorDeviceControlSchemeIndex = default;
 
-        private string originalText;
-
-        private void Awake()
-        {
-            originalText = text.text;
-        }
+        public IReadOnlyList<DeviceControlSchemeIcons> DeviceControlSchemeIconsList => deviceControlSchemeIconsList;
+        public string Text { get => originalText; set => originalText = value; }
 
         private void Start()
         {
-            if(InputSystemCurrentDevicesExtension.Current != null)
+            if (Application.isPlaying)
             {
-                InputSystemCurrentDevicesExtension.Current.OnLastUsedInputDeviceChanged += OnInputDeviceChanged;
-            }
+                if (InputSystemCurrentDevicesExtension.Current != null)
+                {
+                    InputSystemCurrentDevicesExtension.Current.OnLastUsedInputDeviceChanged += OnInputDeviceChanged;
+                }
 
-            TryUpdateText();
+                TryUpdateText();
+            }
+        }
+
+        private void Update()
+        {
+            if (!Application.isPlaying)
+            {
+                TryUpdateTextEditor();
+            }
         }
 
         private void OnDestroy()
         {
-            if (InputSystemCurrentDevicesExtension.Current != null)
+            if (Application.isPlaying)
             {
-                InputSystemCurrentDevicesExtension.Current.OnLastUsedInputDeviceChanged -= OnInputDeviceChanged;
+                if (InputSystemCurrentDevicesExtension.Current != null)
+                {
+                    InputSystemCurrentDevicesExtension.Current.OnLastUsedInputDeviceChanged -= OnInputDeviceChanged;
+                }
             }
         }
 
@@ -64,16 +79,36 @@ namespace Juce.Input.TextMeshPro
                 return;
             }
 
-            LogVerbose($"Updating text for input device: {inputDevice.name}");
-
-            InputSystemCurrentDevicesExtension.Current.TryGetKeyboardInputDevice(
+            InputSystemCurrentDevicesExtension.TryGetKeyboardInputDevice(
                 out InputDevice keyboardInputDevice
                 );
 
-            UpdateTextForInputDevice(inputDevice, defaultInputDevice: keyboardInputDevice);
+            UpdateText(inputDevice, defaultInputDevice: keyboardInputDevice);
         }
 
-        private void UpdateTextForInputDevice(
+        private void TryUpdateTextEditor()
+        {
+            if(deviceControlSchemeIconsList.Count == 0)
+            {
+                return;
+            }
+
+            if(deviceControlSchemeIconsList.Count <= selectedEditorDeviceControlSchemeIndex)
+            {
+                return;
+            }
+
+            DeviceControlSchemeIcons deviceControlSchemeIcons = deviceControlSchemeIconsList[selectedEditorDeviceControlSchemeIndex];
+
+            if(deviceControlSchemeIcons == null)
+            {
+                return;
+            }
+
+            UpdateText(deviceControlSchemeIcons);
+        }
+
+        private void UpdateText(
             InputDevice inputDevice,
             InputDevice defaultInputDevice
             )
@@ -84,7 +119,9 @@ namespace Juce.Input.TextMeshPro
 
             foreach (XmlNode node in nodes)
             {
-                bool iconFound = TryGetControlSchemeIconItem(
+                bool iconFound = InputParsingUtils.TryGetControlSchemeIcon(
+                    inputActionAsset,
+                    deviceControlSchemeIconsList,
                     inputDevice,
                     node.InnerText,
                     out IControlSchemeIconItem controlSchemeIconItem
@@ -92,7 +129,9 @@ namespace Juce.Input.TextMeshPro
 
                 if(!iconFound)
                 {
-                    iconFound = TryGetControlSchemeIconItem(
+                    iconFound = InputParsingUtils.TryGetControlSchemeIcon(
+                        inputActionAsset,
+                        deviceControlSchemeIconsList,
                         defaultInputDevice,
                         node.InnerText,
                         out controlSchemeIconItem
@@ -115,125 +154,82 @@ namespace Juce.Input.TextMeshPro
                     }
                 }
 
-                string iconPath = TextMeshProUtils.BuildMarkdownForSprite(
-                    controlSchemeIconItem.AtlasAsset,
-                    controlSchemeIconItem.AtlasName
-                    );
-
-                currentText = InputTagsParser.ReplaceTag(
-                    currentText,
+                currentText = UpdateTextForControlScheme(
                     node.InnerText,
-                    iconPath
+                    controlSchemeIconItem,
+                    currentText
                     );
             }
 
             text.text = currentText;
         }
 
-        private bool TryGetControlSchemeIconItem(
-            InputDevice inputDevice, 
-            string actionName,
-            out IControlSchemeIconItem controlSchemeIconItem
+        private void UpdateText(
+            DeviceControlSchemeIcons deviceControlSchemeIcons
             )
         {
-            bool found = TryGetInputBindingByName(
-                actionName,
-                inputDevice.name,
-                out InputBinding foundInputBinding
-                );
-
-            if(!found)
-            {
-                controlSchemeIconItem = default;
-                return false;
-            }
-
-            bool iconSetFound = TryGetDeviceControlSchemeIcons(
-                inputDevice,
-                out DeviceControlSchemeIcons deviceControlSchemeIcons
-                );
-
-            if(!iconSetFound)
-            {
-                controlSchemeIconItem = default;
-                return false;
-            }
-
-            return deviceControlSchemeIcons.TryGet(
-                foundInputBinding.effectivePath,
-                out controlSchemeIconItem
-                );
-        }
-
-        private bool TryGetInputBindingByName(
-            string inputBindingName, 
-            string deviceName,
-            out InputBinding foundInputBinding
-            )
-        {
-            foreach (InputActionMap inputActionMap in inputActionAsset.actionMaps)
-            {
-                foreach (InputAction inputAction in inputActionMap.actions)
-                {
-                    foreach (InputBinding inputBinding in inputAction.bindings)
-                    {
-                        bool isInputAction = string.Equals(inputBinding.action, inputBindingName);
-
-                        if (!isInputAction)
-                        {
-                            continue;
-                        }
-
-                        bool isDevice = InputControlPathUtils.MatchesDeviceId(inputBinding, deviceName);
-
-                        if(!isDevice)
-                        {
-                            continue;
-                        }
-
-                        foundInputBinding = inputBinding;
-                        return true;
-                    }
-                }
-            }
-
-            foundInputBinding = default;
-            return false;
-        }
-
-        private bool TryGetDeviceControlSchemeIcons(
-            InputDevice inputDevice,
-            out DeviceControlSchemeIcons foundDeviceControlSchemeIcon
-            )
-        {
-            foreach(DeviceControlSchemeIcons deviceControlSchemeIcon in deviceControlSchemeIconsList)
-            {
-                foreach(string devicePathId in deviceControlSchemeIcon.DevicePathIds)
-                {
-                    bool isDevice = InputControlPathUtils.MatchesDeviceId(inputDevice, devicePathId);
-
-                    if (!isDevice)
-                    {
-                        continue;
-                    }
-
-                    foundDeviceControlSchemeIcon = deviceControlSchemeIcon;
-                    return true;
-                }
-            }
-
-            foundDeviceControlSchemeIcon = default;
-            return false;
-        }
-
-        private void LogVerbose(string log)
-        {
-            if(!verbose)
+            if (deviceControlSchemeIcons.DevicePathIds.Count == 0)
             {
                 return;
             }
 
-            UnityEngine.Debug.Log(log, gameObject);
+            string deviceId = deviceControlSchemeIcons.DevicePathIds[0];
+
+            List<XmlNode> nodes = InputTagsParser.Parse(originalText);
+
+            string currentText = originalText;
+
+            foreach (XmlNode node in nodes)
+            {
+                bool found = InputActionAssetUtils.TryGetInputBindingByActionAndDeviceName(
+                    inputActionAsset,
+                    node.InnerText,
+                    deviceId,
+                    out InputBinding foundInputBinding
+                    );
+
+                if(!found)
+                {
+                    continue;
+                }
+
+                bool iconFound = ControlShemeIconsUtils.TryGetIconIconByInputPath(
+                    deviceControlSchemeIcons,
+                    foundInputBinding.effectivePath,
+                    out IControlSchemeIconItem controlSchemeIconItem
+                    );
+
+                if(!iconFound)
+                {
+                    continue;
+                }
+
+                currentText = UpdateTextForControlScheme(
+                    node.InnerText,
+                    controlSchemeIconItem,
+                    currentText
+                    );
+            }
+
+            text.text = currentText;
+        }
+
+        private string UpdateTextForControlScheme(
+            string actionName,
+            IControlSchemeIconItem controlSchemeIconItem,
+            string currentText
+            )
+        {
+            string iconPath = TextMeshProUtils.BuildMarkdownForSprite(
+                controlSchemeIconItem.AtlasAsset,
+                controlSchemeIconItem.AtlasName
+                );
+
+            return InputTagsParser.ReplaceTag(
+                currentText,
+                actionName,
+                iconPath
+                );
         }
     }
 }
