@@ -168,6 +168,12 @@ namespace Juce.Input.TextMeshPro
             DeviceControlSchemeIcons deviceControlSchemeIcons
             )
         {
+            if (string.IsNullOrEmpty(originalText))
+            {
+                text.text = originalText;
+                return;
+            }
+
             if (deviceControlSchemeIcons.DevicePathIds.Count == 0)
             {
                 return;
