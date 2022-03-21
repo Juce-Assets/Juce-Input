@@ -170,7 +170,6 @@ namespace Juce.Input.TextMeshPro
         {
             if (string.IsNullOrEmpty(originalText))
             {
-                text.text = originalText;
                 return;
             }
 
