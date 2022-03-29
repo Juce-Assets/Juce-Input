@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace Juce.Input.ScrollView
 {
-    public class ScrollbarStepsByScrollviewSize : MonoBehaviour
+    public class ScrollbarStepsByScrollViewSize : MonoBehaviour
     {
         [Header("References")]
         [SerializeField] private Scrollbar scrollbar = default;
@@ -26,7 +26,7 @@ namespace Juce.Input.ScrollView
                 stepsCount = scrollRectContent.sizeDelta.y / stepDistance;
             }
 
-            scrollbar.numberOfSteps = (int)stepsCount;
+            scrollbar.numberOfSteps = 2 + (int)stepsCount;
         }
     }
 }
