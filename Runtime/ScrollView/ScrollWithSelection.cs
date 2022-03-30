@@ -1,4 +1,5 @@
 ﻿using Juce.Input.Navigation;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -51,22 +52,27 @@ namespace Juce.Input.ScrollView
             float scrollViewMinY = content.anchoredPosition.y;
             float scrollViewMaxY = content.anchoredPosition.y + scrollRect.rect.height;
 
-            float selectedPositionY = Mathf.Abs(selectedRectTransform.anchoredPosition.y) + (selectedRectTransform.rect.height / 2);
+            float selectedPositionMinY = Mathf.Abs(selectedRectTransform.anchoredPosition.y) - (selectedRectTransform.rect.height / 2);
+            float selectedPositionMaxY = Mathf.Abs(selectedRectTransform.anchoredPosition.y) + (selectedRectTransform.rect.height / 2);
 
             // If selection below scroll view
-            if (selectedPositionY > scrollViewMaxY)
+            if (selectedPositionMaxY > scrollViewMaxY)
             {
-                float newY = selectedPositionY - scrollRect.rect.height;
-                content.anchoredPosition = new Vector2(content.anchoredPosition.x, newY + verticalSpacing);
+                float newY = selectedPositionMaxY - scrollRect.rect.height;
+                float newYWithVerticalSpacing = newY + verticalSpacing;
+
+                content.anchoredPosition = new Vector2(content.anchoredPosition.x, newYWithVerticalSpacing);
 
                 return;
             }
 
             // If selection above scroll view
-            if (Mathf.Abs(selectedRectTransform.anchoredPosition.y) < scrollViewMinY)
+            if (selectedPositionMinY < scrollViewMinY)
             {
-                float newY = Mathf.Abs(selectedRectTransform.anchoredPosition.y) - (selectedRectTransform.rect.height / 2);
-                content.anchoredPosition = new Vector2(content.anchoredPosition.x, newY - verticalSpacing);
+                float newYWithVerticalSpacing = selectedPositionMinY - verticalSpacing;
+                newYWithVerticalSpacing = Math.Max(0, newYWithVerticalSpacing);
+
+                content.anchoredPosition = new Vector2(content.anchoredPosition.x, newYWithVerticalSpacing);
 
                 return;
             }
