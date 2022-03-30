@@ -127,6 +127,11 @@ namespace Juce.Input.Navigation
 
         private void TryDeselectIfMouseOverUi()
         {
+            if(!Cursor.visible)
+            {
+                return;
+            }
+
             bool isOverUi = TryGetPointerOverUiObject(out GameObject gameObject);
 
             if (!isOverUi)
