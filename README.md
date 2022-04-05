@@ -6,6 +6,6 @@ Unity does not support resolving dependences from a git url. Because of that, yo
 ```
 "dependencies": {
    "com.unity.inputsystem": "1.0.2",
-   "com.unity.textmeshpro": "3.0.4"
+   "com.unity.textmeshpro": "3.0.4",
 },
 ```
