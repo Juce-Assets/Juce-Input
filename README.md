@@ -2,4 +2,6 @@
 
 ## Installing
 
-Unity dependences: TextMeshPro, NewInputSystem.
+Unity Package Manager dependences:
+- TextMeshPro
+- NewInputSystem
